@@ -1,52 +1,46 @@
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.*;
-import java.util.Objects;
+
+/**
+ * The program implements an application that simply displays website ode
+ * responses.
+ *
+ * @author Christos Pavlatos
+ * @version 2.0
+ * @since 2019-03-31
+ */
 
 public class GETCodeResponse {
 
 	public static void main(String[] args) throws Exception {
 
-		String fileContainingUrl = "associations.csv";
-
+		String fileContainingUrl = "sites.txt";
 		String siteLine = null;
-		String domain = "https://pcth6fm1ud.execute-api.us-west-1.amazonaws.com/dev/";
 
 		FileReader urlToTest = new FileReader(fileContainingUrl);
 		BufferedReader bufferedReader = new BufferedReader(urlToTest);
 
-		while (bufferedReader.readLine() != null) {
-
-			String splitBy = ",";
-			siteLine = domain + bufferedReader.readLine();
-			String[] b = siteLine.split(splitBy);
-			String expectedUrl = b[1];
-			System.out.println(b[0]);
-			URL uri = new URL(b[0]);
+		while ((siteLine = bufferedReader.readLine()) != null) {
+			System.out.println(siteLine);
+			URL uri = new URL(siteLine);
 			HttpURLConnection urlConnection = (HttpURLConnection) uri.openConnection();
-
 			urlConnection.setRequestMethod("GET");
-			urlConnection.setInstanceFollowRedirects(false);
-			HttpURLConnection.setFollowRedirects(false);
-
-			String uriInString = uri.toString();
-
-			String newUrl = urlConnection.getHeaderField("Location");
-			System.out.println("Location : " + newUrl);
+			urlConnection.connect();
 
 			int code = urlConnection.getResponseCode();
-
-			System.out.println("Response Code   : " + code);
-
-			boolean testResult = passOrFail(newUrl, expectedUrl, code);
-			System.out.println(testResult + "\n");
-			urlConnection.disconnect();
-
+			System.out.println("Response  : " + code);
+			if (code == 200) {
+				System.out.println("200 OK");
+			} else if (code == 301) {
+				System.out.println("301 Moved Permanently");
+			} else if (code == 404) {
+				System.out.println("404 Not Found");
+			} else {
+				System.out.println(code);
+			}
 		}
 		bufferedReader.close();
 	}
 
-	public static boolean passOrFail(String newUrl, String expectedUrl, int code) {
-		return (Objects.equals(newUrl, expectedUrl) && code == 301);
-	}
 }
