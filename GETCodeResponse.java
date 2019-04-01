@@ -15,7 +15,7 @@ public class GETCodeResponse {
 
 	public static void main(String[] args) throws Exception {
 
-		String fileContainingUrl = "sites.txt";
+		String fileContainingUrl = "src/sites.txt";
 		String siteLine = null;
 
 		FileReader urlToTest = new FileReader(fileContainingUrl);
