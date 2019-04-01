@@ -2,6 +2,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.*;
 
+/**
+ * The program implements an application that simply displays website ode
+ * responses.
+ *
+ * @author Christos Pavlatos
+ * @version 2.0
+ * @since 2019-03-31
+ */
+
 public class GETCodeResponse {
 
 	public static void main(String[] args) throws Exception {
